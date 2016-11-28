@@ -1,0 +1,4 @@
+http-fetcher Change Log
+
+Current Development 0.1-SNAPSHOT
+- Port HttpClient code from crawler-commons (kkrugler) #1
