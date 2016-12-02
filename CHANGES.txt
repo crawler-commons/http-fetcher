@@ -1,4 +1,5 @@
 http-fetcher Change Log
 
 Current Development 0.1-SNAPSHOT
+- Jetty server used for tests is outdated  (aecio via kkrugler) #5
 - Port HttpClient code from crawler-commons (kkrugler) #1
