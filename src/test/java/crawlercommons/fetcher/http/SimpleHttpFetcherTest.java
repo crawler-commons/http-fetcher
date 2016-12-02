@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Crawler-Commons
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,20 +28,21 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.Assert;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mortbay.http.HttpException;
-import org.mortbay.http.HttpHandler;
-import org.mortbay.http.HttpRequest;
-import org.mortbay.http.HttpResponse;
-import org.mortbay.http.HttpServer;
-import org.mortbay.http.SocketListener;
-import org.mortbay.http.handler.AbstractHttpHandler;
 
 import crawlercommons.fetcher.AbortedFetchException;
 import crawlercommons.fetcher.AbortedFetchReason;
@@ -72,22 +73,21 @@ public class SimpleHttpFetcherTest {
         _webServer.stopServer();
     }
 
-    private void startServer(HttpHandler handler, int port) throws Exception {
+    private void startServer(Handler handler, int port) throws Exception {
         _webServer.startServer(handler, port);
     }
 
-    private void stopServer() throws InterruptedException {
+    private void stopServer() throws Exception {
         _webServer.stopServer();
     }
 
-    private HttpServer getServer() {
+    private Server getServer() {
         return _webServer.getServer();
     }
 
     // TODO - merge this code with RedirectResponseHandler class in
     // crawlercommons.test package.
-    @SuppressWarnings("serial")
-    private class RedirectResponseHandler extends AbstractHttpHandler {
+    private class RedirectResponseHandler extends AbstractHandler {
 
         private boolean _permanent;
 
@@ -101,19 +101,20 @@ public class SimpleHttpFetcherTest {
         }
 
         @Override
-        public void handle(String pathInContext, String pathParams, HttpRequest request, HttpResponse response) throws HttpException, IOException {
+        public void handle(String pathInContext, Request baseRequest,
+                           HttpServletRequest request, HttpServletResponse response) throws IOException {
             if (pathInContext.endsWith("base")) {
                 if (_permanent) {
                     // Can't use sendRedirect, as that forces it to be a temp
                     // redirect.
-                    response.setStatus(HttpStatus.SC_MOVED_PERMANENTLY);
-                    response.addField("Location", "http://localhost:8089/redirect");
-                    request.setHandled(true);
+                    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                    response.addHeader("Location", "http://localhost:8089/redirect");
+                    response.flushBuffer();
                 } else {
                     response.sendRedirect("http://localhost:8089/redirect");
                 }
             } else {
-                response.setStatus(HttpStatus.SC_OK);
+                response.setStatus(HttpServletResponse.SC_OK);
                 response.setContentType("text/plain");
 
                 String content = "redirected";
@@ -123,8 +124,7 @@ public class SimpleHttpFetcherTest {
         }
     }
 
-    @SuppressWarnings("serial")
-    private class LanguageResponseHandler extends AbstractHttpHandler {
+    private class LanguageResponseHandler extends AbstractHandler {
 
         private String _englishContent;
         private String _foreignContent;
@@ -135,8 +135,10 @@ public class SimpleHttpFetcherTest {
         }
 
         @Override
-        public void handle(String pathInContext, String pathParams, HttpRequest request, HttpResponse response) throws HttpException, IOException {
-            String language = request.getField(HttpHeaders.ACCEPT_LANGUAGE);
+        public void handle(String target, Request baseRequest,
+                           HttpServletRequest request, HttpServletResponse response)
+                           throws IOException, ServletException {
+            String language = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
             String content;
             if ((language != null) && (language.contains("en"))) {
                 content = _englishContent;
@@ -152,8 +154,7 @@ public class SimpleHttpFetcherTest {
         }
     }
 
-    @SuppressWarnings("serial")
-    private class MimeTypeResponseHandler extends AbstractHttpHandler {
+    private class MimeTypeResponseHandler extends AbstractHandler {
 
         private String _mimeType;
 
@@ -162,7 +163,8 @@ public class SimpleHttpFetcherTest {
         }
 
         @Override
-        public void handle(String pathInContext, String pathParams, HttpRequest request, HttpResponse response) throws HttpException, IOException {
+        public void handle(String pathInContext, Request baseRequest,
+                           HttpServletRequest request, HttpServletResponse response) throws IOException {
             String content = "test";
             response.setStatus(HttpStatus.SC_OK);
             if (_mimeType != null) {
@@ -191,8 +193,8 @@ public class SimpleHttpFetcherTest {
     @Test
     public final void testStaleConnection() throws Exception {
         startServer(new ResourcesResponseHandler(), 8089);
-        SocketListener sl = (SocketListener) getServer().getListeners()[0];
-        sl.setLingerTimeSecs(-1);
+        ServerConnector sc = (ServerConnector) getServer().getConnectors()[0];
+        sc.setSoLingerTime(-1);
 
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/simple-page.html";
@@ -462,9 +464,8 @@ public class SimpleHttpFetcherTest {
             fail("Should have thrown exception");
         } catch (HttpFetchException e) {
             assertEquals(HttpStatus.SC_NOT_FOUND, e.getHttpStatus());
-
             // Make sure the reason gets into the exception message.
-            assertTrue(e.getMessage().contains("Not Found"));
+            assertTrue(e.getMessage().contains("Resource not found"));
         }
     }
 
