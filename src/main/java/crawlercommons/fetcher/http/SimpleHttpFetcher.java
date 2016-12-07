@@ -166,6 +166,8 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
     private int _connectionRequestTimeout;
     private int _maxRetryCount;
 
+    
+
     transient private CloseableHttpClient _httpClient;
     transient private PoolingHttpClientConnectionManager _connectionManager;
 
@@ -886,6 +888,11 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
                 requestConfigBuilder.setSocketTimeout(_socketTimeout);
                 requestConfigBuilder.setConnectTimeout(_connectionTimeout);
                 requestConfigBuilder.setConnectionRequestTimeout(_connectionRequestTimeout);
+
+                if(proxy != null){
+                    LOGGER.info("Configuring fetcher to use proxy: "+proxy.toURI());
+                    httpClientBuilder.setProxy(proxy);
+                }
 
                 /*
                  * CoreConnectionPNames.TCP_NODELAY='http.tcp.nodelay':

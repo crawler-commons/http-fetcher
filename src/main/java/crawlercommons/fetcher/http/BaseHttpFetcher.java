@@ -15,6 +15,8 @@
  */
 package crawlercommons.fetcher.http;
 
+import org.apache.http.HttpHost;
+
 import crawlercommons.fetcher.BaseFetcher;
 
 /**
@@ -48,6 +50,7 @@ public abstract class BaseHttpFetcher extends BaseFetcher {
     protected int _minResponseRate = DEFAULT_MIN_RESPONSE_RATE;
     protected String _acceptLanguage = DEFAULT_ACCEPT_LANGUAGE;
     protected RedirectMode _redirectMode = DEFAULT_REDIRECT_MODE;
+    protected HttpHost proxy;
 
     public BaseHttpFetcher(int maxThreads, UserAgent userAgent) {
         super();
@@ -117,6 +120,10 @@ public abstract class BaseHttpFetcher extends BaseFetcher {
 
     public RedirectMode getRedirectMode() {
         return _redirectMode;
+    }
+
+    public void setProxy(String scheme, String host, int port) {
+        this.proxy = new HttpHost(host, port, scheme);
     }
 
 }
