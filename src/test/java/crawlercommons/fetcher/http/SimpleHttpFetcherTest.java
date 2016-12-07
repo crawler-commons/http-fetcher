@@ -48,12 +48,12 @@ import crawlercommons.fetcher.AbortedFetchException;
 import crawlercommons.fetcher.AbortedFetchReason;
 import crawlercommons.fetcher.BaseFetcher;
 import crawlercommons.fetcher.FetchedResult;
-import crawlercommons.fetcher.HttpFetchException;
 import crawlercommons.fetcher.IOFetchException;
 import crawlercommons.fetcher.Payload;
 import crawlercommons.fetcher.RedirectFetchException;
 import crawlercommons.fetcher.RedirectFetchException.RedirectExceptionReason;
 import crawlercommons.fetcher.http.BaseHttpFetcher.RedirectMode;
+import crawlercommons.test.FixedStatusResponseHandler;
 import crawlercommons.test.RandomResponseHandler;
 import crawlercommons.test.ResourcesResponseHandler;
 import crawlercommons.test.SimulationWebServer;
@@ -459,14 +459,26 @@ public class SimpleHttpFetcherTest {
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/this-page-will-not-exist.html";
 
-        try {
-            fetcher.get(url);
-            fail("Should have thrown exception");
-        } catch (HttpFetchException e) {
-            assertEquals(HttpStatus.SC_NOT_FOUND, e.getHttpStatus());
-            // Make sure the reason gets into the exception message.
-            assertTrue(e.getMessage().contains("Resource not found"));
-        }
+        FetchedResult result = fetcher.get(url);
+        
+        assertEquals(HttpStatus.SC_NOT_FOUND, result.getStatusCode());
+        assertEquals(url, result.getFetchedUrl());
+        assertEquals("127.0.0.1", result.getHostAddress());
+        assertTrue(new String(result.getContent(), "UTF-8").contains("Error 404"));
+    }
+
+    @Test
+    public final void testInternalServerErrorPage() throws Exception {
+        startServer(new FixedStatusResponseHandler(HttpStatus.SC_INTERNAL_SERVER_ERROR), 8089);
+        BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
+        String url = "http://localhost:8089/";
+
+        FetchedResult result = fetcher.get(url);
+
+        assertEquals(HttpStatus.SC_INTERNAL_SERVER_ERROR, result.getStatusCode());
+        assertEquals(url, result.getFetchedUrl());
+        assertEquals("127.0.0.1", result.getHostAddress());
+        assertTrue(new String(result.getContent(), "UTF-8").contains("Pre-defined error fetching"));
     }
 
 }
