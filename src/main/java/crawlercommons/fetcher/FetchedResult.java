@@ -18,9 +18,8 @@ package crawlercommons.fetcher;
 
 import java.nio.charset.Charset;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 
-import org.apache.tika.metadata.Metadata;
+import crawlercommons.util.Headers;
 
 /**
  */
@@ -31,7 +30,7 @@ public class FetchedResult {
     private final byte[] _content;
     private final String _contentType;
     private final int _responseRate;
-    private final Metadata _headers;
+    private final Headers _headers;
     private final String _newBaseUrl;
     private final int _numRedirects;
     private final String _hostAddress;
@@ -39,7 +38,7 @@ public class FetchedResult {
     private final String _reasonPhrase; // HTTP reason phrase, or null
     private Payload _payload;
 
-    public FetchedResult(String baseUrl, String redirectedUrl, long fetchTime, Metadata headers, byte[] content, String contentType, int responseRate, Payload payload, String newBaseUrl,
+    public FetchedResult(String baseUrl, String redirectedUrl, long fetchTime, Headers headers, byte[] content, String contentType, int responseRate, Payload payload, String newBaseUrl,
                     int numRedirects, String hostAddress, int statusCode, String reasonPhrase) {
         _payload = payload;
 
@@ -117,7 +116,7 @@ public class FetchedResult {
         return _responseRate;
     }
 
-    public Metadata getHeaders() {
+    public Headers getHeaders() {
         return _headers;
     }
 
@@ -154,10 +153,9 @@ public class FetchedResult {
         report.append("FetchedResult Report:\n");
         report.append("*********************\n");
         report.append("    BaseUrl       : " + getBaseUrl() + "\n");
-        report.append("    Headers       : __\n"); // Map Tika Metadata to
-                                                   // individual string entries
+        report.append("    Headers       : __\n");
         for (String header : getHeaders().names()) {
-            String mdString = getHeaders().get(header) + Arrays.toString(getHeaders().getValues(header));
+            String mdString = header + "=" + getHeaders().getValues(header);
             report.append("                   " + mdString + "\n");
         }
         report.append("    StatusCode    : " + getStatusCode() + "\n");
@@ -166,8 +164,7 @@ public class FetchedResult {
         report.append("    NewBaseUrl    : " + getNewBaseUrl() + "\n");
         report.append("    HostAddress   : " + getHostAddress() + "\n");
         report.append("    ResponseRate  : " + getResponseRate() + "\n");
-        report.append("    PayLoad       : __\n"); // Map Keysets to individual
-                                                   // string entries
+        report.append("    PayLoad       : __\n");
         for (String payLoad : getPayload().keySet()) {
             String payString = payLoad + getPayload().get(payLoad);
             report.append("                   " + payString + "\n");
@@ -176,10 +173,7 @@ public class FetchedResult {
         report.append("    FetchedUrl    : " + getFetchedUrl() + "\n");
         report.append("    ContentType   : " + getContentType() + "\n");
         report.append("    ContentLength : " + getContentLength() + "\n");
-        report.append("    Content       : " + new String(getContent(), Charset.defaultCharset()) + "\n"); // byte
-        // array
-        // to
-        // string
+        report.append("    Content       : " + new String(getContent(), Charset.defaultCharset()) + "\n");
         report.append("*********************\n");
         report.append("End of Report:\n");
         return report.toString();

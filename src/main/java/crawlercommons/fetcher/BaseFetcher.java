@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.tika.mime.MediaType;
+import crawlercommons.util.MediaType;
 
 /**
  */

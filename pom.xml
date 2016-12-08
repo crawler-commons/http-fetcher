@@ -337,10 +337,11 @@
 		<!-- Dependencies -->
 		<httpclient.version>4.5.1</httpclient.version>
 		<commons-io.version>2.4</commons-io.version>
-		<tika-core.version>1.13</tika-core.version>
 		<slf4j-api.version>1.7.7</slf4j-api.version>
-		<junit.version>4.7</junit.version>
+
+		<!-- Dependencies for testing -->
 		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
+		<junit.version>4.7</junit.version>
 		<mockito-core.version>1.8.0</mockito-core.version>
 		<jetty.version>9.3.6.v20151106</jetty.version>
 
@@ -382,12 +383,6 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.tika</groupId>
-			<artifactId>tika-core</artifactId>
-			<version>${tika-core.version}</version>
 		</dependency>
 
 		<dependency>

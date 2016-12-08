@@ -16,7 +16,7 @@
 
 package crawlercommons.fetcher;
 
-import org.apache.tika.metadata.Metadata;
+import crawlercommons.util.Headers;
 
 /**
  */
@@ -24,13 +24,13 @@ import org.apache.tika.metadata.Metadata;
 public class HttpFetchException extends BaseFetchException {
 
     private int _httpStatus;
-    private Metadata _httpHeaders;
+    private Headers _httpHeaders;
 
     public HttpFetchException() {
         super();
     }
 
-    public HttpFetchException(String url, String msg, int httpStatus, Metadata httpHeaders) {
+    public HttpFetchException(String url, String msg, int httpStatus, Headers httpHeaders) {
         super(url, msg);
         _httpStatus = httpStatus;
         _httpHeaders = httpHeaders;
@@ -40,7 +40,7 @@ public class HttpFetchException extends BaseFetchException {
         return _httpStatus;
     }
 
-    public Metadata getHttpHeaders() {
+    public Headers getHttpHeaders() {
         return _httpHeaders;
     }
 
