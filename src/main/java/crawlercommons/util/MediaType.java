@@ -30,6 +30,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Code borrowed from Apache Tika in order to reduce external dependencies.
+ * 
  * Internet media type.
  */
 public final class MediaType implements Comparable<MediaType>, Serializable {
