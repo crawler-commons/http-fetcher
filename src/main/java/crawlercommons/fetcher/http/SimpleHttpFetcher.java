@@ -85,7 +85,6 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpRequestExecutor;
-import org.apache.tika.metadata.Metadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,6 +101,7 @@ import crawlercommons.fetcher.RedirectFetchException.RedirectExceptionReason;
 import crawlercommons.fetcher.UrlFetchException;
 import crawlercommons.util.EncodingUtils;
 import crawlercommons.util.EncodingUtils.ExpandedResult;
+import crawlercommons.util.Headers;
 
 /**
  */
@@ -571,7 +571,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
 
         HttpResponse response;
         long readStartTime;
-        Metadata headerMap = new Metadata();
+        Headers headerMap = new Headers();
         String redirectedUrl = null;
         String newBaseUrl = null;
         int numRedirects = 0;
