@@ -93,7 +93,6 @@ import crawlercommons.fetcher.AbortedFetchReason;
 import crawlercommons.fetcher.BadProtocolFetchException;
 import crawlercommons.fetcher.BaseFetchException;
 import crawlercommons.fetcher.FetchedResult;
-import crawlercommons.fetcher.HttpFetchException;
 import crawlercommons.fetcher.IOFetchException;
 import crawlercommons.fetcher.Payload;
 import crawlercommons.fetcher.RedirectFetchException;
@@ -529,13 +528,6 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
 
         try {
             return doRequest(request, url, payload);
-        } catch (HttpFetchException e) {
-            // Don't bother generating a trace for a 404 (not found)
-            if (LOGGER.isTraceEnabled() && (e.getHttpStatus() != HttpStatus.SC_NOT_FOUND)) {
-                LOGGER.trace("Exception fetching {} {}", url, e.getMessage());
-            }
-
-            throw e;
         } catch (AbortedFetchException e) {
             // Don't bother reporting that we bailed because the mime-type
             // wasn't one that we wanted.
@@ -617,12 +609,6 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
                 if (headerMap.get(HttpHeaders.LOCATION) != null) {
                     fetchTrace.append("; Location: " + headerMap.get(HttpHeaders.LOCATION));
                 }
-            }
-
-            if ((statusCode < 200) || (statusCode >= 300)) {
-                // We can't just check against SC_OK, as some wackos return 201,
-                // 202, etc
-                throw new HttpFetchException(url, "Error fetching " + url + " due to \"" + reasonPhrase + "\"", statusCode, headerMap);
             }
 
             redirectedUrl = extractRedirectedUrl(url, localContext);
