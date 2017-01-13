@@ -1,6 +1,7 @@
 http-fetcher Change Log
 
 Current Development 0.1-SNAPSHOT
+- Switch back to Java 1.7 copmpatibility (kkrugler) #13
 - Don't throw exceptions for HTTP errors (aecio via kkrugler) #7
 - Remove Tika dependency (aecio via kkrugler) #2
 - Jetty server used for tests is outdated  (aecio via kkrugler) #5
