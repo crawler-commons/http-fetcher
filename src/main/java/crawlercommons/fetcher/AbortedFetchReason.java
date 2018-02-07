@@ -27,4 +27,5 @@ public enum AbortedFetchReason {
     INTERRUPTED, // Fetch was interrupted (typically by FetchBuffer calling
                  // executor.terminate())
     CONTENT_SIZE, // Content exceeds Fetcher.getMaxContentSize()
+    FETCH_DURATION_EXCEEDED, // Fetch has exceeded the duration of time it was allotted 
 }

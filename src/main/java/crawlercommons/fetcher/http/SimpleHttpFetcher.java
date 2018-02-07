@@ -736,6 +736,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
 
                 int readRequests = 0;
                 int minResponseRate = getMinResponseRate();
+                long fetchDurationTimeout = getFetchDurationTimeoutInSeconds() * 1000L;
                 // TODO KKr - we need to monitor the rate while reading a
                 // single block. Look at HttpClient
                 // metrics support for how to do this. Once we fix this, fix
@@ -749,6 +750,9 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
                     // Assume read time is at least one millisecond, to avoid
                     // DBZ exception.
                     long totalReadTime = Math.max(1, System.currentTimeMillis() - readStartTime);
+                    if (totalReadTime > fetchDurationTimeout) {
+                        throw new AbortedFetchException(url, "Fetch duration of " + getFetchDurationTimeoutInSeconds() + " sec exceeded", AbortedFetchReason.FETCH_DURATION_EXCEEDED);
+                    }
                     readRate = (totalRead * 1000L) / totalReadTime;
 
                     // Don't bail on the first read cycle, as we can get a

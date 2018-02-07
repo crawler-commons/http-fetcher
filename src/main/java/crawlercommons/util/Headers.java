@@ -39,7 +39,7 @@ public class Headers implements Serializable {
     public static final String LAST_MODIFIED = "Last-Modified";
     public static final String LOCATION = "Location";
 
-    private final List<String> EMPTY_VALUES = Collections.unmodifiableList(new ArrayList<String>());
+    private final static List<String> EMPTY_VALUES = Collections.unmodifiableList(new ArrayList<String>());
 
     /**
      * A map of all headers.

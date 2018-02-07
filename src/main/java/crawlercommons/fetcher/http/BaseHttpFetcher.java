@@ -33,6 +33,7 @@ public abstract class BaseHttpFetcher extends BaseFetcher {
     public static final int NO_MIN_RESPONSE_RATE = Integer.MIN_VALUE;
     public static final int NO_REDIRECTS = 0;
 
+    public static final int DEFAULT_FETCH_DURATION_TIMEOUT_IN_SECONDS = 100;
     public static final int DEFAULT_MIN_RESPONSE_RATE = NO_MIN_RESPONSE_RATE;
     public static final int DEFAULT_MAX_CONNECTIONS_PER_HOST = 2;
     public static final int DEFAULT_MAX_REDIRECTS = 20;
@@ -41,6 +42,7 @@ public abstract class BaseHttpFetcher extends BaseFetcher {
 
     protected int _maxThreads;
     protected UserAgent _userAgent;
+    protected int _fetchDurationTimeoutInSeconds = DEFAULT_FETCH_DURATION_TIMEOUT_IN_SECONDS;
     protected int _maxRedirects = DEFAULT_MAX_REDIRECTS;
     protected int _maxConnectionsPerHost = DEFAULT_MAX_CONNECTIONS_PER_HOST;
     protected int _minResponseRate = DEFAULT_MIN_RESPONSE_RATE;
@@ -60,6 +62,14 @@ public abstract class BaseHttpFetcher extends BaseFetcher {
 
     public UserAgent getUserAgent() {
         return _userAgent;
+    }
+
+    public void setFetchDurationTimeoutInSeconds(int fetchDurationTimeoutInSeconds) {
+        _fetchDurationTimeoutInSeconds = fetchDurationTimeoutInSeconds;
+    }
+
+    public int getFetchDurationTimeoutInSeconds() {
+        return _fetchDurationTimeoutInSeconds;
     }
 
     public void setMaxConnectionsPerHost(int maxConnectionsPerHost) {
