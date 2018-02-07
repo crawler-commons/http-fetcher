@@ -209,6 +209,22 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
+    public final void testFetchDurationTimeout() throws Exception {
+        // Set up a response handler that provides a response for 2 seconds.
+        startServer(new RandomResponseHandler(20000, 2 * 1000L), 8089);
+        BaseHttpFetcher baseHttpFetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
+        baseHttpFetcher.setFetchDurationTimeoutInSeconds(1);  // Limit the fetch duration to 1 second.
+        
+        String url = "http://localhost:8089/test.html";
+        try {
+            baseHttpFetcher.get(url);
+            fail("Exception not thrown");
+        } catch (AbortedFetchException e) {
+            assertTrue(e.getAbortReason() == AbortedFetchReason.FETCH_DURATION_EXCEEDED);
+        }
+    }
+    
+    @Test
     public final void testSlowServerTermination() throws Exception {
         // Need to read in more than 2 8K blocks currently, due to how
         // HttpClientFetcher
