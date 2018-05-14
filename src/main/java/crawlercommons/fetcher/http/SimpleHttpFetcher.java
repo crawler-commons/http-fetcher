@@ -889,7 +889,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
                 requestConfigBuilder.setConnectTimeout(_connectionTimeout);
                 requestConfigBuilder.setConnectionRequestTimeout(_connectionRequestTimeout);
 
-                if(_proxy != null){
+                if (_proxy != null){
                     LOGGER.info("Configuring fetcher to use _proxy: "+ _proxy.toURI());
                     httpClientBuilder.setProxy(_proxy);
                 }

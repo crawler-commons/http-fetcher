@@ -123,7 +123,11 @@ public abstract class BaseHttpFetcher extends BaseFetcher {
     }
 
     public void setProxy(String scheme, String host, int port) {
-        this._proxy = new HttpHost(host, port, scheme);
+        _proxy = new HttpHost(host, port, scheme);
+    }
+
+    public HttpHost getProxy() {
+        return _proxy;
     }
 
 }
