@@ -166,8 +166,6 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
     private int _connectionRequestTimeout;
     private int _maxRetryCount;
 
-    
-
     transient private CloseableHttpClient _httpClient;
     transient private PoolingHttpClientConnectionManager _connectionManager;
 
@@ -250,7 +248,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
             // port number to
             // -1 in that case.
             //
-            // Detailed scenrio:
+            // Detailed scenario:
             // http://www.test.com/MyPage ->
             // http://www.test.com:80/MyRedirectedPage ->
             // http://www.test.com/MyRedirectedPage
@@ -890,7 +888,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
                 requestConfigBuilder.setConnectionRequestTimeout(_connectionRequestTimeout);
 
                 if (_proxy != null){
-                    LOGGER.info("Configuring fetcher to use _proxy: "+ _proxy.toURI());
+                    LOGGER.info("Configuring fetcher to use _proxy: " + _proxy.toURI());
                     httpClientBuilder.setProxy(_proxy);
                 }
 
