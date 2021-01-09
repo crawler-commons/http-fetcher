@@ -116,7 +116,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
     // get Connection from Pool.
     // From initial comment of the deprecated 'CONNECTION_POOL_TIMEOUT' static
     // element:
-    // "This normally doesen't ever hit this timeout, since we manage the number
+    // "This normally doesn't ever hit this timeout, since we manage the number
     // of
     // fetcher threads to be <= the maxThreads value used to configure a
     // HttpFetcher. However the limit of connections/host can cause a timeout,
@@ -149,12 +149,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
 
     private IdleConnectionMonitorThread monitor;
 
-    private ThreadLocal<CookieStore> localCookieStore = new ThreadLocal<CookieStore>() {
-        protected CookieStore initialValue() {
-            CookieStore cookieStore = new LocalCookieStore();
-            return cookieStore;
-        }
-    };
+    private CookieStoreProvider cookieStoreProvider = new ThreadLocalCookieStoreProvider();
 
     private static final String SSL_CONTEXT_NAMES[] = { "TLS", "Default", "SSL", };
 
@@ -248,7 +243,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
             // port number to
             // -1 in that case.
             //
-            // Detailed scenrio:
+            // Detailed scenario:
             // http://www.test.com/MyPage ->
             // http://www.test.com:80/MyRedirectedPage ->
             // http://www.test.com/MyRedirectedPage
@@ -496,6 +491,14 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
         _maxRetryCount = maxRetryCount;
     }
 
+    public void setCookieStoreProvider(CookieStoreProvider cookieStoreProvider) {
+        this.cookieStoreProvider = cookieStoreProvider;
+    }
+
+    public CookieStoreProvider getCookieStoreProvider() {
+        return cookieStoreProvider;
+    }
+
     @Override
     public FetchedResult get(String url, Payload payload) throws BaseFetchException {
         try {
@@ -566,7 +569,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
         // Without this we get killed w/lots of threads, due to sync() on single
         // cookie store.
         HttpContext localContext = new BasicHttpContext();
-        CookieStore cookieStore = localCookieStore.get();
+        CookieStore cookieStore = cookieStoreProvider.get();
         localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
 
         StringBuilder fetchTrace = null;
@@ -887,6 +890,11 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
                 requestConfigBuilder.setConnectTimeout(_connectionTimeout);
                 requestConfigBuilder.setConnectionRequestTimeout(_connectionRequestTimeout);
 
+                if (_proxy != null){
+                    LOGGER.info("Configuring fetcher to use _proxy: " + _proxy.toURI());
+                    httpClientBuilder.setProxy(_proxy);
+                }
+
                 /*
                  * CoreConnectionPNames.TCP_NODELAY='http.tcp.nodelay':
                  * determines whether Nagle's algorithm is to be used. Nagle's
@@ -950,7 +958,7 @@ public class SimpleHttpFetcher extends BaseHttpFetcher {
                 // cookieParams.setSingleHeader(false);
 
                 // Create and initialize connection socket factory registry
-                RegistryBuilder<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory> create();
+                RegistryBuilder<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create();
                 registry.register("http", PlainConnectionSocketFactory.getSocketFactory());
                 SSLConnectionSocketFactory sf = createSSLConnectionSocketFactory();
                 if (sf != null) {
