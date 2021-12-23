@@ -342,7 +342,7 @@
 		<!-- Dependencies for testing -->
 		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
 		<junit.version>4.7</junit.version>
-		<mockito-core.version>1.8.0</mockito-core.version>
+		<mockito-core.version>4.2.0</mockito-core.version>
 		<jetty.version>9.4.44.v20210927</jetty.version>
 
 		<!-- Maven Plugin Dependencies -->
