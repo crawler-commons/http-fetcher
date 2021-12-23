@@ -25,11 +25,11 @@ import crawlercommons.util.HttpFetcherVersion;
  * User Agent enables us to describe characteristics of any http-fetcher
  * agent. There are a number of constructor options to describe the following:
  * <ol>
- * <li><tt>_agentName</tt>: Primary agent name.</li>
- * <li><tt>_emailAddress</tt>: The agent owners email address.</li>
- * <li><tt>_webAddress</tt>: A web site/address representing the agent owner.</li>
- * <li><tt>_browserVersion</tt>: Broswer version used for compatibility.</li>
- * <li><tt>_crawlerVersion</tt>: Version of the user agents personal crawler. If
+ * <li><code>_agentName</code>: Primary agent name.</li>
+ * <li><code>_emailAddress</code>: The agent owners email address.</li>
+ * <li><code>_webAddress</code>: A web site/address representing the agent owner.</li>
+ * <li><code>_browserVersion</code>: Broswer version used for compatibility.</li>
+ * <li><code>_crawlerVersion</code>: Version of the user agents personal crawler. If
  * this is not set, it defaults to the http-fetcher maven artifact version.</li>
  * </ol>
  * 
