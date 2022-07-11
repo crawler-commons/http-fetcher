@@ -346,7 +346,7 @@
 		<slf4j-api.version>1.7.36</slf4j-api.version>
 
 		<!-- Dependencies for testing -->
-		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
+		<slf4j-log4j12.version>1.7.33</slf4j-log4j12.version>
 		<junit.version>4.13.2</junit.version>
 		<mockito-core.version>4.6.1</mockito-core.version>
 		<jetty.version>9.4.48.v20220622</jetty.version>
