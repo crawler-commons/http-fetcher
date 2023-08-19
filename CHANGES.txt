@@ -8,3 +8,21 @@ Current Development 0.1-SNAPSHOT
 - Port HttpClient code from crawler-commons (kkrugler) #1
 - Allow configuration of HTTP proxies (aecio via kkrugler) #8
 - Allow custom cookie store (aecio via kkrugler)
+- Enable GitHub's dependabot (aecio)
+- Enable GitHub Actions CI (aecio)
+- Set Java version to 1.8 (aecio)
+- Fix invalid HTML5 tags in Javadoc (aecio)
+- Bump commons-io from 2.4 to 2.11.0
+- Bump httpclient from 4.5.8 to 4.5.13
+- Bump jetty version from 9.3.6.v20151106 to 9.4.44.v20210927
+- Bump mockito-core from 1.8.0 to 4.2.0
+- Bump junit from 4.7 to 4.13.2
+- Bump forbiddenapis from 1.8 to 3.3
+- Bump mockito-core from 4.2.0 to 4.6.1
+- Bump Jetty from 9.4.44.v20210927 to 9.4.48.v20220622
+- Bump maven-javadoc-plugin from 2.9.1 to 3.4.0
+- Bump maven-source-plugin from 2.1.2 to 3.2.1
+- Bump maven-surefire-plugin from 2.12 to 2.22.2
+- Bump maven-release-plugin from 2.5.1 to 2.5.3
+- Bump slf4j-api from 1.7.7 to 1.7.36
+- Bump slf4j-log4j12 from 1.7.32 to 1.7.33

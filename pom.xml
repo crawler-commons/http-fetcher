@@ -92,6 +92,12 @@
 			<name>Avi Hayun</name>
 			<email>avraham2@gmail.com</email>
 		</developer>
+
+		<developer>
+			<id>aecio</id>
+			<name>Aécio Santos</name>
+			<email>aecio.solando@gmail.com</email>
+		</developer>
 	</developers>
 
 	<build>
@@ -221,7 +227,7 @@
             <plugin>
                 <groupId>de.thetaphi</groupId>
                 <artifactId>forbiddenapis</artifactId>
-                <version>1.8</version>
+                <version>3.3</version>
                 <configuration>
                     <!-- disallow undocumented classes like sun.misc.Unsafe: -->
                     <internalRuntimeForbidden>true</internalRuntimeForbidden>
@@ -335,24 +341,24 @@
 
 	<properties>
 		<!-- Dependencies -->
-		<httpclient.version>4.5.8</httpclient.version>
-		<commons-io.version>2.4</commons-io.version>
-		<slf4j-api.version>1.7.7</slf4j-api.version>
+		<httpclient.version>4.5.13</httpclient.version>
+		<commons-io.version>2.11.0</commons-io.version>
+		<slf4j-api.version>1.7.36</slf4j-api.version>
 
 		<!-- Dependencies for testing -->
-		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
-		<junit.version>4.7</junit.version>
-		<mockito-core.version>1.8.0</mockito-core.version>
-		<jetty.version>9.3.6.v20151106</jetty.version>
+		<slf4j-log4j12.version>1.7.33</slf4j-log4j12.version>
+		<junit.version>4.13.2</junit.version>
+		<mockito-core.version>4.6.1</mockito-core.version>
+		<jetty.version>9.4.48.v20220622</jetty.version>
 
 		<!-- Maven Plugin Dependencies -->
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 		<maven-resources-plugin.version>2.5</maven-resources-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-		<maven-surfire-plugin.version>2.12</maven-surfire-plugin.version>
-		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
-		<maven-source-plugin.version>2.1.2</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+		<maven-surfire-plugin.version>2.22.2</maven-surfire-plugin.version>
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
 		<maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
 		<apache-rat-plugin.version>0.8</apache-rat-plugin.version>
 		<maven-assembly-plugin.version>2.2.2</maven-assembly-plugin.version>
@@ -361,9 +367,9 @@
 
 		<!-- General Properties -->
 		<implementation.build>${scmBranch}@r${buildNumber}</implementation.build>
-		<javac.src.version>1.7</javac.src.version>
-		<javac.target.version>1.7</javac.target.version>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<javac.src.version>1.8</javac.src.version>
+		<javac.target.version>1.8</javac.target.version>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssZ</maven.build.timestamp.format>
 		<skipTests>false</skipTests>
 		<assembly.finalName>${project.build.finalName}</assembly.finalName>
