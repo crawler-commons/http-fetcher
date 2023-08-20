@@ -29,3 +29,4 @@ Current Development 0.1-SNAPSHOT
 - Upgrade project to use Java 11 (aecio)
 - Upgrade tests to use to Jetty 11 (aecio)
 - Upgrade tests to jUnit 5 (aecio)
+- Allow full configuration of the User-Agent using a builder (aecio)
