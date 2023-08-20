@@ -17,8 +17,7 @@
 package crawlercommons.fetcher;
 
 import java.io.UnsupportedEncodingException;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +39,7 @@ public class FetchedResultTest {
      * @throws UnsupportedEncodingException
      */
     @Test
-    public void testPrintReport() throws UnsupportedEncodingException {
+    void testPrintReport() throws UnsupportedEncodingException {
         Headers headerMetadata = new Headers();
         headerMetadata.add(Headers.CONTENT_DISPOSITION, "This is content disposition");
         headerMetadata.add(Headers.CONTENT_ENCODING, "This is the encoding");

@@ -16,11 +16,7 @@
 
 package crawlercommons.fetcher.http;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -37,10 +33,10 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import crawlercommons.fetcher.AbortedFetchException;
 import crawlercommons.fetcher.AbortedFetchReason;
@@ -61,12 +57,12 @@ public class SimpleHttpFetcherTest {
 
     private SimulationWebServer _webServer;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         _webServer = new SimulationWebServer();
     }
 
-    @After
+    @AfterEach
     public void shutDown() throws Exception {
         _webServer.stopServer();
     }
@@ -175,7 +171,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testConnectionTimeout() throws Exception {
+    final void testConnectionTimeout() throws Exception {
         startServer(new ResourcesResponseHandler(), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8088/simple-page.html";
@@ -212,7 +208,7 @@ public class SimpleHttpFetcherTest {
     // }
 
     @Test
-    public final void testFetchDurationTimeout() throws Exception {
+    final void testFetchDurationTimeout() throws Exception {
         // Set up a response handler that provides a response for 2 seconds.
         startServer(new RandomResponseHandler(20000, 2 * 1000L), 8089);
         BaseHttpFetcher baseHttpFetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
@@ -226,9 +222,9 @@ public class SimpleHttpFetcherTest {
             assertTrue(e.getAbortReason() == AbortedFetchReason.FETCH_DURATION_EXCEEDED);
         }
     }
-    
+
     @Test
-    public final void testSlowServerTermination() throws Exception {
+    final void testSlowServerTermination() throws Exception {
         // Need to read in more than 2 8K blocks currently, due to how
         // HttpClientFetcher
         // is designed...so use 20K bytes. And the duration is 2 seconds, so 10K
@@ -249,7 +245,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testNotTerminatingSlowServers() throws Exception {
+    final void testNotTerminatingSlowServers() throws Exception {
         // Return 1K bytes at 2K bytes/second - would normally trigger an
         // error.
         startServer(new RandomResponseHandler(1000, 500), 8089);
@@ -263,18 +259,18 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testLargeContent() throws Exception {
+    final void testLargeContent() throws Exception {
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         startServer(new RandomResponseHandler(fetcher.getDefaultMaxContentSize() * 2), 8089);
 
         String url = "http://localhost:8089/test.html";
         FetchedResult result = fetcher.get(url);
         assertEquals(HttpStatus.SC_OK, result.getStatusCode());
-        assertTrue("Content size should be truncated", result.getContent().length <= fetcher.getDefaultMaxContentSize());
+        assertTrue(result.getContent().length <= fetcher.getDefaultMaxContentSize(), "Content size should be truncated");
     }
 
     @Test
-    public final void testTruncationWithKeepAlive() throws Exception {
+    final void testTruncationWithKeepAlive() throws Exception {
         startServer(new ResourcesResponseHandler(), 8089);
 
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
@@ -305,24 +301,24 @@ public class SimpleHttpFetcherTest {
             fetcher.get(urlToFetch);
             fail("Aborted fetch exception not thrown");
         } catch (AbortedFetchException e) {
-            Assert.assertEquals(AbortedFetchReason.CONTENT_SIZE, e.getAbortReason());
+            Assertions.assertEquals(AbortedFetchReason.CONTENT_SIZE, e.getAbortReason());
         }
 
     }
 
     @Test
-    public final void testLargeHtml() throws Exception {
+    final void testLargeHtml() throws Exception {
         startServer(new ResourcesResponseHandler(), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/karlie.html";
         FetchedResult result = fetcher.get(url);
 
-        assertTrue("Content size should be truncated", result.getContentLength() <= fetcher.getDefaultMaxContentSize());
+        assertTrue(result.getContentLength() <= fetcher.getDefaultMaxContentSize(), "Content size should be truncated");
 
     }
 
     @Test
-    public final void testContentTypeHeader() throws Exception {
+    final void testContentTypeHeader() throws Exception {
         startServer(new ResourcesResponseHandler(), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/simple-page.html";
@@ -334,19 +330,19 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testTempRedirectHandling() throws Exception {
+    final void testTempRedirectHandling() throws Exception {
         startServer(new RedirectResponseHandler(), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/base";
         FetchedResult result = fetcher.get(url);
 
-        assertEquals("Redirected URL", "http://localhost:8089/redirect", result.getFetchedUrl());
+        assertEquals("http://localhost:8089/redirect", result.getFetchedUrl(), "Redirected URL");
         assertNull(result.getNewBaseUrl());
         assertEquals(1, result.getNumRedirects());
     }
 
     @Test
-    public final void testPermRedirectHandling() throws Exception {
+    final void testPermRedirectHandling() throws Exception {
         startServer(new RedirectResponseHandler(true), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/base";
@@ -354,14 +350,14 @@ public class SimpleHttpFetcherTest {
         payload.put("payload-field-1", 1);
         FetchedResult result = fetcher.get(url, payload);
 
-        assertEquals("Redirected URL", "http://localhost:8089/redirect", result.getFetchedUrl());
-        assertEquals("New base URL", "http://localhost:8089/redirect", result.getNewBaseUrl());
+        assertEquals("http://localhost:8089/redirect", result.getFetchedUrl(), "Redirected URL");
+        assertEquals("http://localhost:8089/redirect", result.getNewBaseUrl(), "New base URL");
         assertEquals(1, result.getNumRedirects());
         assertEquals(1, result.getPayload().get("payload-field-1"));
     }
 
     @Test
-    public final void testRedirectPolicy() throws Exception {
+    final void testRedirectPolicy() throws Exception {
         startServer(new RedirectResponseHandler(true), 8089);
         BaseHttpFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         fetcher.setRedirectMode(RedirectMode.FOLLOW_TEMP);
@@ -371,7 +367,7 @@ public class SimpleHttpFetcherTest {
             fetcher.get(url);
             fail("Exception should have been thrown");
         } catch (RedirectFetchException e) {
-            assertEquals("Redirected URL", "http://localhost:8089/redirect", e.getRedirectedUrl());
+            assertEquals("http://localhost:8089/redirect", e.getRedirectedUrl(), "Redirected URL");
             assertEquals(RedirectExceptionReason.PERM_REDIRECT_DISALLOWED, e.getReason());
         }
 
@@ -386,14 +382,14 @@ public class SimpleHttpFetcherTest {
             fetcher.get(url);
             fail("Exception should have been thrown");
         } catch (RedirectFetchException e) {
-            assertEquals("Redirected URL", "http://localhost:8089/redirect", e.getRedirectedUrl());
+            assertEquals("http://localhost:8089/redirect", e.getRedirectedUrl(), "Redirected URL");
             assertEquals(RedirectExceptionReason.TEMP_REDIRECT_DISALLOWED, e.getReason());
         }
 
     }
 
     @Test
-    public final void testAcceptLanguage() throws Exception {
+    final void testAcceptLanguage() throws Exception {
         final String englishContent = "English";
         final String foreignContent = "Foreign";
 
@@ -406,7 +402,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testMimeTypeFiltering() throws Exception {
+    final void testMimeTypeFiltering() throws Exception {
 
         startServer(new MimeTypeResponseHandler("text/xml"), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
@@ -425,7 +421,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testMimeTypeFilteringNoContentType() throws Exception {
+    final void testMimeTypeFilteringNoContentType() throws Exception {
 
         startServer(new MimeTypeResponseHandler(null), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
@@ -444,7 +440,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testMimeTypeFilteringWithCharset() throws Exception {
+    final void testMimeTypeFilteringWithCharset() throws Exception {
         startServer(new MimeTypeResponseHandler("text/html; charset=UTF-8"), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         Set<String> validMimeTypes = new HashSet<String>();
@@ -461,7 +457,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testHostAddress() throws Exception {
+    final void testHostAddress() throws Exception {
         startServer(new ResourcesResponseHandler(), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/simple-page.html";
@@ -473,7 +469,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testMissingPage() throws Exception {
+    final void testMissingPage() throws Exception {
         startServer(new ResourcesResponseHandler(), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/this-page-will-not-exist.html";
@@ -487,7 +483,7 @@ public class SimpleHttpFetcherTest {
     }
 
     @Test
-    public final void testInternalServerErrorPage() throws Exception {
+    final void testInternalServerErrorPage() throws Exception {
         startServer(new FixedStatusResponseHandler(HttpStatus.SC_INTERNAL_SERVER_ERROR), 8089);
         BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
         String url = "http://localhost:8089/";
