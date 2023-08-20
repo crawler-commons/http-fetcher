@@ -26,3 +26,4 @@ Current Development 0.1-SNAPSHOT
 - Bump maven-release-plugin from 2.5.1 to 2.5.3
 - Bump slf4j-api from 1.7.7 to 1.7.36
 - Bump slf4j-log4j12 from 1.7.32 to 1.7.33
+- Upgrade project to use Java 11 (aecio)
