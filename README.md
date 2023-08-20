@@ -12,10 +12,14 @@ An example of creating a fetcher with five threads that will only accept content
 
 ``` java
 // Data passed to UserAgent will be used to automatically create HTTP header 'User-Agent'
-UserAgent userAgent = new UserAgent("mycrawler", "crawler@domain.com", "http://domain.com");
+UserAgent ua = new UserAgent.Builder()
+    .setAgentName("MyCrawler")
+    .setCrawlerVersion("1.0")
+    .setWebAddress("www.mycrawler.com/bot.html")
+    .build();
 
 // Instantiate the BaseFetcher object used to fetch pages
-BaseFetcher fetcher = new SimpleHttpFetcher(1, userAgent);
+BaseFetcher fetcher = new SimpleHttpFetcher(5, userAgent);
 
 // Configure the accepted mime-types
 Set<String> validMimeTypes = new HashSet<>();
