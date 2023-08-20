@@ -28,16 +28,14 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.junit.After;
 import org.junit.Assert;
@@ -137,7 +135,7 @@ public class SimpleHttpFetcherTest {
         @Override
         public void handle(String target, Request baseRequest,
                            HttpServletRequest request, HttpServletResponse response)
-                           throws IOException, ServletException {
+                           throws IOException {
             String language = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
             String content;
             if ((language != null) && (language.contains("en"))) {
@@ -190,23 +188,28 @@ public class SimpleHttpFetcherTest {
         }
     }
 
-    @Test
-    public final void testStaleConnection() throws Exception {
-        startServer(new ResourcesResponseHandler(), 8089);
-        ServerConnector sc = (ServerConnector) getServer().getConnectors()[0];
-        sc.setSoLingerTime(-1);
-
-        BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
-        String url = "http://localhost:8089/simple-page.html";
-        fetcher.get(url);
-
-        // TODO KKr - control keep-alive (linger?) value for Jetty, so we can
-        // set it
-        // to something short and thus make this sleep delay much shorter.
-        Thread.sleep(2000);
-
-        fetcher.get(url);
-    }
+    // This test is commented out because the method 'ServerConnector::setSoLingerTime()'
+    // is not supported in Jetty 11+ anymore. So it is unclear if the test below is
+    // doing what it is supposed to do. It is also not clear if there is an alternative
+    // way to test this.
+    // See issue: https://github.com/crawler-commons/http-fetcher/issues/33
+    //
+    // @Test
+    // public final void testStaleConnection() throws Exception {
+    // startServer(new ResourcesResponseHandler(), 8089);
+    // ServerConnector sc = (ServerConnector) getServer().getConnectors()[0];
+    // sc.setSoLingerTime(-1);
+    //
+    // BaseFetcher fetcher = new SimpleHttpFetcher(1, TestUtils.CC_TEST_AGENT);
+    // String url = "http://localhost:8089/simple-page.html";
+    // fetcher.get(url);
+    //
+    // // TODO KKr - control keep-alive (linger?) value for Jetty, so we can
+    // // set it to something short and thus make this sleep delay much shorter.
+    // Thread.sleep(2000);
+    //
+    // fetcher.get(url);
+    // }
 
     @Test
     public final void testFetchDurationTimeout() throws Exception {
