@@ -28,3 +28,4 @@ Current Development 0.1-SNAPSHOT
 - Bump slf4j-log4j12 from 1.7.32 to 1.7.33
 - Upgrade project to use Java 11 (aecio)
 - Upgrade tests to use to Jetty 11 (aecio)
+- Upgrade tests to jUnit 5 (aecio)
