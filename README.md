@@ -4,7 +4,7 @@ The Crawler Commons' http-fetcher is a Java library that provides common page fe
 Currently, it uses Apache HttpClient library to implement low-level HTTP communication.
 
 ## Requirements
-Currently, http-fetcher requires Java 8+.
+Currently, http-fetcher requires Java 11+.
 
 ## API
 
