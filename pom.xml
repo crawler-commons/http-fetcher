@@ -183,7 +183,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
+				<version>${maven-jar-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -352,8 +352,8 @@
 		<jetty.version>9.4.48.v20220622</jetty.version>
 
 		<!-- Maven Plugin Dependencies -->
-		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
-		<maven-resources-plugin.version>2.5</maven-resources-plugin.version>
+		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-surfire-plugin.version>2.22.2</maven-surfire-plugin.version>
 		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
