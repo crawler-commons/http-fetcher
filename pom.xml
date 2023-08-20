@@ -227,14 +227,9 @@
             <plugin>
                 <groupId>de.thetaphi</groupId>
                 <artifactId>forbiddenapis</artifactId>
-                <version>3.3</version>
+                <version>3.5.1</version>
                 <configuration>
-                    <!-- disallow undocumented classes like sun.misc.Unsafe: -->
-                    <internalRuntimeForbidden>true</internalRuntimeForbidden>
-                    <!--
-                    if the used Java version is too new,
-                    don't fail, just do nothing:
-                    -->
+                    <!-- if the used Java version is too new, don't fail, just do nothing: -->
                     <failOnUnsupportedJava>false</failOnUnsupportedJava>
                     <bundledSignatures>
                         <bundledSignature>jdk-unsafe</bundledSignature>
@@ -342,13 +337,13 @@
 	<properties>
 		<!-- Dependencies -->
 		<httpclient.version>4.5.14</httpclient.version>
-		<commons-io.version>2.11.0</commons-io.version>
+		<commons-io.version>2.13.0</commons-io.version>
 		<slf4j-api.version>2.0.7</slf4j-api.version>
 
 		<!-- Dependencies for testing -->
-		<slf4j-log4j12.version>1.7.33</slf4j-log4j12.version>
+		<slf4j-log4j12.version>2.0.7</slf4j-log4j12.version>
 		<junit.version>4.13.2</junit.version>
-		<mockito-core.version>4.6.1</mockito-core.version>
+		<mockito-core.version>5.4.0</mockito-core.version>
 		<jetty.version>9.4.48.v20220622</jetty.version>
 
 		<!-- Maven Plugin Dependencies -->
@@ -357,6 +352,7 @@
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-surfire-plugin.version>2.22.2</maven-surfire-plugin.version>
 		<maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.4.0</maven-javadoc-plugin.version>
 		<maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
