@@ -344,7 +344,7 @@
 		<slf4j-log4j12.version>2.0.7</slf4j-log4j12.version>
 		<junit.version>5.10.0</junit.version>
 		<mockito-core.version>5.5.0</mockito-core.version>
-		<jetty.version>11.0.15</jetty.version>
+		<jetty.version>11.0.16</jetty.version>
 
 		<!-- Maven Plugin Dependencies -->
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
